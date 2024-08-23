@@ -1,0 +1,21 @@
+# See https://pre-commit.com/ for usage and config
+
+# Install Hooks
+# pip install pre-commit
+# pip install --upgrade pre-commit
+# pre-commit install
+
+# Remove hooks
+# pre-commit uninstall
+# rm .git/hooks -rf
+
+repos:
+    -   repo: local
+        hooks:
+            -   id: format
+                name: Commit
+                stages: [ commit ]
+                language: system
+                entry: gofmt .
+                pass_filenames: false
+                verbose: false

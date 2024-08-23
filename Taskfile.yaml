@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+    default:
+        cmds:
+            - task --list-all
+        silent: true
+    install-hooks:
+        cmds:
+            - pip install pre-commit
+            - pip install --upgrade pre-commit
+            - pre-commit install
+    remove-hooks:
+        ignore_error: true
+        cmds:
+            - pre-commit uninstall
+            - rm .git/hooks -rf
