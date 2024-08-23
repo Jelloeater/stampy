@@ -3,8 +3,12 @@ version: '3'
 tasks:
     default:
         cmds:
-            - task --list-all
-        silent: true
+            - go fmt .
+            - go vet .
+            - go clean .
+            - go run .
+        silent: false
+
     install-hooks:
         cmds:
             - pip install pre-commit
