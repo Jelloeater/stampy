@@ -6,7 +6,8 @@ tasks:
             - go fmt .
             - go vet .
             - go clean .
-            - go run .
+            - go build .
+            - ./stampy
         silent: false
 
     install-hooks:

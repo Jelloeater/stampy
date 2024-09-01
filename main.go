@@ -1,39 +1,61 @@
 package main
 
 import (
-	"log"
-	"os"
-
+	"github.com/atotto/clipboard"
 	"github.com/urfave/cli/v2"
-
-	"golang.design/x/clipboard"
+	"log"
+	"log/slog"
+	"os"
+	"os/exec"
+	"time"
 )
 
-func writeDate() {
-	err := clipboard.Init()
-	if err != nil {
-		log.Fatal(err)
-	}
-	t := clipboard.Read(clipboard.FmtText)
-	log.Print(string(t))
-	write := "text data"
-	clipboard.Write(clipboard.FmtText, []byte(write))
-	t = clipboard.Read(clipboard.FmtText)
-	log.Print(string(t))
+func writeDate(format string, timezone string) {
+	log.Print(format)
+	log.Print(timezone)
+	_ = clipboard.WriteAll(format + timezone)
 
 }
 
-func main() {
-	app := &cli.App{
-		Name:  "writeDate",
-		Usage: "fight the loneliness!",
-		Action: func(*cli.Context) error {
-			writeDate()
+func mainCliApp() error {
+	gitSHA, _ := exec.Command("git", "rev-parse", "HEAD").Output()
 
+	app := &cli.App{
+		Name:        "stampy",
+		Version:     string(gitSHA),
+		Description: "Copy formatted timestamp to system clipboard",
+		Compiled:    time.Time{},
+
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:  "format",
+				Value: "YYYY-MM-DDTHH:MM:SSZ",
+				Usage: "Timestamp format",
+			},
+			&cli.StringFlag{
+				Name:  "timezone",
+				Value: "UTC",
+				Usage: "Timezone",
+			},
+		},
+
+		Action: func(c *cli.Context) error {
+			format := c.String("format")
+			timezone := c.String("timezone")
+			writeDate(format, timezone)
 			return nil
 		},
 	}
-	if err := app.Run(os.Args); err != nil {
+
+	// Run App and return value
+	return app.Run(os.Args)
+}
+
+func main() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+	app := mainCliApp()
+	if err := app; err != nil {
 		log.Fatal(err)
 	}
 }
