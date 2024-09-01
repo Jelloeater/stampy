@@ -11,9 +11,17 @@ import (
 )
 
 func writeDate(format string, timezone string) {
-	log.Print(format)
-	log.Print(timezone)
-	_ = clipboard.WriteAll(format + timezone)
+
+	loc, e := time.LoadLocation(timezone)
+	if e != nil {
+		log.Fatal(e)
+	}
+	now := time.Now().In(loc)
+
+	timestamp := now.Format(format)
+	clip := timestamp
+	println(clip + " copied to clipboard")
+	_ = clipboard.WriteAll(clip)
 
 }
 
@@ -29,7 +37,7 @@ func mainCliApp() error {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "format",
-				Value: "YYYY-MM-DDTHH:MM:SSZ",
+				Value: "2006-01-02T15:04:05Z07:00",
 				Usage: "Timestamp format",
 			},
 			&cli.StringFlag{
@@ -43,6 +51,7 @@ func mainCliApp() error {
 			format := c.String("format")
 			timezone := c.String("timezone")
 			writeDate(format, timezone)
+
 			return nil
 		},
 	}
