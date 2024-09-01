@@ -6,8 +6,13 @@ import (
 	"log"
 	"log/slog"
 	"os"
-	"os/exec"
 	"time"
+)
+
+var ( // Create by GoRelease at compile time
+	version = "dev"
+	commit  = "none"
+	//date    = "unknown"
 )
 
 func writeDate(format string, timezone string) {
@@ -26,14 +31,12 @@ func writeDate(format string, timezone string) {
 }
 
 func mainCliApp() error {
-	gitSHA, _ := exec.Command("git", "rev-parse", "HEAD").Output()
 
 	app := &cli.App{
-		Name:        "stampy",
-		Version:     string(gitSHA),
-		Description: "Copy formatted timestamp to system clipboard",
-		Compiled:    time.Time{},
-
+		Name:    "stampy",
+		Usage:   "Copy formatted timestamp to system clipboard",
+		Args:    true,
+		Version: "v" + version + " build " + commit,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "format",
@@ -46,7 +49,13 @@ func mainCliApp() error {
 				Usage: "Timezone",
 			},
 		},
-
+		EnableBashCompletion: false,
+		HideHelp:             false,
+		HideHelpCommand:      false,
+		HideVersion:          false,
+		BashComplete:         nil,
+		Before:               nil,
+		After:                nil,
 		Action: func(c *cli.Context) error {
 			format := c.String("format")
 			timezone := c.String("timezone")
@@ -54,6 +63,25 @@ func mainCliApp() error {
 
 			return nil
 		},
+		CommandNotFound:           nil,
+		OnUsageError:              nil,
+		InvalidFlagAccessHandler:  nil,
+		Compiled:                  time.Time{}.UTC(),
+		Authors:                   nil,
+		Copyright:                 "",
+		Reader:                    nil,
+		Writer:                    nil,
+		ErrWriter:                 nil,
+		ExitErrHandler:            nil,
+		Metadata:                  nil,
+		ExtraInfo:                 nil,
+		CustomAppHelpTemplate:     "",
+		SliceFlagSeparator:        "",
+		DisableSliceFlagSeparator: false,
+		UseShortOptionHandling:    false,
+		Suggest:                   false,
+		AllowExtFlags:             false,
+		SkipFlagParsing:           false,
 	}
 
 	// Run App and return value
