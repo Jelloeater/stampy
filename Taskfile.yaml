@@ -6,8 +6,10 @@ tasks:
             - go fmt .
             - go vet .
             - go clean .
-            - go build .
-            - ./stampy
+            - rm -rf ./build
+            - mkdir ./build
+            - go build -o ./build .
+            - ./build/stampy
         silent: false
 
     install-hooks:
