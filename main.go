@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"log/slog"
 	"os"
 
 	"github.com/urfave/cli/v2"
@@ -10,26 +9,30 @@ import (
 	"golang.design/x/clipboard"
 )
 
-func greet() {
-	slog.Info("INFO!")
+func writeDate() {
+	err := clipboard.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+	t := clipboard.Read(clipboard.FmtText)
+	log.Print(string(t))
+	write := "text data"
+	clipboard.Write(clipboard.FmtText, []byte(write))
+	t = clipboard.Read(clipboard.FmtText)
+	log.Print(string(t))
+
 }
 
 func main() {
 	app := &cli.App{
-		Name:  "greet",
+		Name:  "writeDate",
 		Usage: "fight the loneliness!",
 		Action: func(*cli.Context) error {
-			greet()
+			writeDate()
 
-			clipboard.Write(clipboard.FmtText, []byte("text data"))
 			return nil
 		},
 	}
-	err := clipboard.Init()
-	if err != nil {
-
-	}
-
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
