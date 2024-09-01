@@ -1,5 +1,20 @@
 # Stampy
 
+## Install
+Use https://github.com/zyedidia/eget
+
+```shell
+curl https://zyedidia.github.io/eget.sh | sh
+sudo mv eget /usr/local/bin
+sudo eget Jelloeater/stampy --to /usr/local/bin
+```
+
+Or if you have Go installed
+
+```shell
+go install github.com/Jelloeater/stampy@latest
+```
+
 ## Usage
 
 ```shell

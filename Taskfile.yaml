@@ -2,15 +2,22 @@ version: '3'
 
 tasks:
     default:
+        dir: .
         cmds:
+            - go mod download
+            - go mod tidy
+            - go mod verify
             - go fmt .
             - go vet .
             - go clean .
-            - rm -rf ./build
-            - mkdir ./build
-            - go build -o ./build .
-            - ./build/stampy
+            - task: build
         silent: false
+
+    build:
+        - rm -rf ./build
+        - mkdir ./build
+        - go build -o ./build .
+        - ./build/stampy
 
     install-hooks:
         cmds:
