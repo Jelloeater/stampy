@@ -31,6 +31,11 @@ func writeDate(format string, timezone string) {
 }
 
 func mainCliApp() error {
+	authors := []*cli.Author{
+		{
+			Name: "Jelloeater",
+		},
+	}
 
 	app := &cli.App{
 		Name:    "stampy",
@@ -49,13 +54,10 @@ func mainCliApp() error {
 				Usage: "Timezone",
 			},
 		},
-		EnableBashCompletion: false,
+		EnableBashCompletion: true,
 		HideHelp:             false,
 		HideHelpCommand:      false,
 		HideVersion:          false,
-		BashComplete:         nil,
-		Before:               nil,
-		After:                nil,
 		Action: func(c *cli.Context) error {
 			format := c.String("format")
 			timezone := c.String("timezone")
@@ -63,25 +65,13 @@ func mainCliApp() error {
 
 			return nil
 		},
-		CommandNotFound:           nil,
-		OnUsageError:              nil,
-		InvalidFlagAccessHandler:  nil,
+
 		Compiled:                  time.Time{}.UTC(),
-		Authors:                   nil,
+		Authors:                   authors,
 		Copyright:                 "",
-		Reader:                    nil,
-		Writer:                    nil,
-		ErrWriter:                 nil,
-		ExitErrHandler:            nil,
-		Metadata:                  nil,
-		ExtraInfo:                 nil,
-		CustomAppHelpTemplate:     "",
-		SliceFlagSeparator:        "",
 		DisableSliceFlagSeparator: false,
-		UseShortOptionHandling:    false,
-		Suggest:                   false,
-		AllowExtFlags:             false,
-		SkipFlagParsing:           false,
+		UseShortOptionHandling:    true,
+		Suggest:                   true,
 	}
 
 	// Run App and return value

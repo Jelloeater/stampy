@@ -21,8 +21,8 @@ tasks:
 
     install-hooks:
         cmds:
-            - pip install pre-commit
-            - pip install --upgrade pre-commit
+#            - pip install pre-commit
+#            - pip install --upgrade pre-commit
             - pre-commit install
     remove-hooks:
         ignore_error: true
