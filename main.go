@@ -17,6 +17,13 @@ var ( // Create by GoRelease at compile time
 
 func writeDate(format string, timezone string) {
 
+	if os.Getenv("STAMPY_TZ") != "" {
+		timezone = os.Getenv("STAMPY_TZ")
+	}
+	if os.Getenv("STAMPY_FORMAT") != "" {
+		format = os.Getenv("STAMPY_FORMAT")
+	}
+
 	loc, e := time.LoadLocation(timezone)
 	if e != nil {
 		log.Fatal(e)
