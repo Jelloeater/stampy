@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/atotto/clipboard"
+	"github.com/beevik/ntp"
 	"github.com/urfave/cli/v2"
 	"log"
 	"log/slog"
@@ -15,13 +16,16 @@ var ( // Create by GoRelease at compile time
 	//date    = "unknown"
 )
 
-func writeDate(format string, timezone string) {
+func writeDate(format string, timezone string, ntpServer string) {
 
 	if os.Getenv("STAMPY_TZ") != "" {
 		timezone = os.Getenv("STAMPY_TZ")
 	}
 	if os.Getenv("STAMPY_FORMAT") != "" {
 		format = os.Getenv("STAMPY_FORMAT")
+	}
+	if os.Getenv("STAMPY_NTP") != "" {
+		ntpServer = os.Getenv("STAMPY_NTP")
 	}
 
 	loc, e := time.LoadLocation(timezone)
@@ -30,6 +34,11 @@ func writeDate(format string, timezone string) {
 	}
 	now := time.Now().In(loc)
 
+	if ntpServer != "" { // Override local time with NTP server
+		ntpTime, _ := ntp.Time(ntpServer)
+		now = ntpTime
+		println("NTP from " + ntpServer)
+	}
 	timestamp := now.Format(format)
 	clip := timestamp
 	println(clip + " copied to clipboard")
@@ -60,6 +69,11 @@ func mainCliApp() error {
 				Value: "UTC",
 				Usage: "Timezone",
 			},
+			&cli.StringFlag{
+				Name:  "ntp_server",
+				Value: "",
+				Usage: "NTP Server (ex pool.ntp.org)",
+			},
 		},
 		EnableBashCompletion: true,
 		HideHelp:             false,
@@ -68,7 +82,8 @@ func mainCliApp() error {
 		Action: func(c *cli.Context) error {
 			format := c.String("format")
 			timezone := c.String("timezone")
-			writeDate(format, timezone)
+			ntpServer := c.String("ntp_server")
+			writeDate(format, timezone, ntpServer)
 
 			return nil
 		},

@@ -19,8 +19,9 @@ go install github.com/Jelloeater/stampy@latest
 ### Settings
 You can use ENV_VARs to override settings
 ```shell
-export STAMPY_TZ=EST
+export STAMPY_TZ='EST'
 export STAMPY_FORMAT='01/02/2006 15:04'
+export STAMPY_NTP='pool.ntp.org'
 ```
 
 ### Help
