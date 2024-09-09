@@ -16,7 +16,14 @@ go install github.com/Jelloeater/stampy@latest
 ```
 
 ## Usage
+### Settings
+You can use ENV_VARs to override settings
+```shell
+export STAMPY_TZ=EST
+export STAMPY_FORMAT='01/02/2006 15:04'
+```
 
+### Help
 ```shell
 stampy --help
 NAME:
