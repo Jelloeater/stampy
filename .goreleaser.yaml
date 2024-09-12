@@ -1,0 +1,25 @@
+project_name: stampy
+builds:
+  - env: [CGO_ENABLED=0]
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+nfpms:
+-
+  maintainer: Jelloeater <jello@jelloeater.me>
+  bindir: /usr/local/bin
+  description: Copy formatted timestamp to system clipboard
+  homepage: https://github.com/Jelloeater/stampy
+  license: MIT
+  formats:
+  - deb
+  - rpm
+  - apk
+  - termux.deb
+  - archlinux
+  - ipk
+
