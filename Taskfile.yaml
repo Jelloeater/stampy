@@ -11,13 +11,28 @@ tasks:
             - go vet .
             - go clean .
             - task: build
+            - stampy
         silent: false
 
-    build:
+    go_build:
         - rm -rf ./build
         - mkdir ./build
         - go build -o ./build .
         - ./build/stampy
+
+    rm_deb:
+      ignore_error: true
+      cmds:
+      - sudo dpkg -r stampy -y
+    snapshot_build:
+      - goreleaser --snapshot --clean
+    build:
+      deps:
+        - rm_deb
+        - snapshot_build
+      cmds:
+        - goreleaser --snapshot --clean
+        - sudo dpkg -i $(find dist/*amd64.deb)
 
     install-hooks:
         cmds:
