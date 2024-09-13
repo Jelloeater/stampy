@@ -21,3 +21,4 @@ fabric.properties
 go.work
 
 build
+dist

@@ -31,6 +31,6 @@ jobs:
           distribution: goreleaser
           # 'latest', 'nightly', or a semver
           version: "~> v2"
-          args: release --clean --rm-dist
+          args: release --clean --rm-dist --verbose --config .goreleaser.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
