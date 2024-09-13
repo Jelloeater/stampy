@@ -34,3 +34,17 @@ jobs:
           args: release --clean --verbose --config .goreleaser.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: jrandiny/apt-repo-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          arch: |
+            amd64
+            i386
+          version: |
+            noble
+            jammy
+          file: stampy.deb
+          file_target_version: noble
+          public_key: ${{ secrets.PUBLIC }}
+          private_key: ${{ secrets.PRIVATE }}
+          key_passphrase: ${{ secrets.SECRET }}
