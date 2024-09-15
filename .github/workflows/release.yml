@@ -34,3 +34,13 @@ jobs:
           args: release --clean --verbose --config .goreleaser.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: push package to packagecloud.io
+        uses: computology/packagecloud-github-action@v0.6
+        with:
+          package-name: dist/*.deb
+          packagecloud-username: jelloeater
+          packagecloud-reponame: stampy
+          packagecloud-distro: any
+          packagecloud-token: ${{ secrets.PACKAGECLOUD_TOKEN }}
