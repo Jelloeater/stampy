@@ -16,7 +16,7 @@ var ( // Create by GoRelease at compile time
 	//date    = "unknown"
 )
 
-func writeDate(format string, timezone string, ntpServer string) {
+func writeDate(format string, timezone string, ntpServer string, diaryFormat bool) {
 
 	if os.Getenv("STAMPY_TZ") != "" {
 		timezone = os.Getenv("STAMPY_TZ")
@@ -26,6 +26,9 @@ func writeDate(format string, timezone string, ntpServer string) {
 	}
 	if os.Getenv("STAMPY_NTP") != "" {
 		ntpServer = os.Getenv("STAMPY_NTP")
+	}
+	if diaryFormat {
+		format = "1/2/2006 15:04"
 	}
 
 	loc, e := time.LoadLocation(timezone)
@@ -57,12 +60,17 @@ func mainCliApp() error {
 		Name:    "stampy",
 		Usage:   "Copy formatted timestamp to system clipboard",
 		Args:    true,
-		Version: "v" + version + " build " + commit,
+		Version: "v" + version + "+" + commit,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "format",
 				Value: "2006-01-02T15:04:05Z07:00",
 				Usage: "Timestamp format",
+			},
+			&cli.BoolFlag{
+				Name:  "diary",
+				Value: false,
+				Usage: "Diary format",
 			},
 			&cli.StringFlag{
 				Name:  "timezone",
@@ -83,7 +91,13 @@ func mainCliApp() error {
 			format := c.String("format")
 			timezone := c.String("timezone")
 			ntpServer := c.String("ntp_server")
-			writeDate(format, timezone, ntpServer)
+			diaryFormat := c.Bool("diary")
+			writeDate(
+				format,
+				timezone,
+				ntpServer,
+				diaryFormat,
+			)
 
 			return nil
 		},
