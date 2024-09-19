@@ -11,6 +11,17 @@
 
 ## Install
 
+### Apt-Get (Perfered)
+
+https://packagecloud.io/jelloeater/stampy
+
+```shell
+curl -s https://packagecloud.io/install/repositories/jelloeater/stampy/script.deb.sh | sudo bash
+sudo apt-get install stampy
+```
+
+### Binary (eget)
+
 Use <https://github.com/zyedidia/eget>
 
 ```shell
@@ -19,7 +30,7 @@ sudo mv eget /usr/local/bin
 sudo eget Jelloeater/stampy --to /usr/local/bin
 ```
 
-Or if you have Go installed
+### Via Go
 
 ```shell
 go install github.com/Jelloeater/stampy@latest
