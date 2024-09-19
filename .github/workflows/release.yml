@@ -14,6 +14,9 @@ permissions:
 
 jobs:
   goreleaser:
+    strategy:
+      matrix:
+        distro: [debian/bullseye, debian/bookworm, ubuntu/noble, ubuntu/jammy]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,12 +38,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: push package to packagecloud.io
         uses: computology/packagecloud-github-action@v0.6
         with:
           package-name: dist/*.deb
           packagecloud-username: jelloeater
           packagecloud-reponame: stampy
-          packagecloud-distro: Debian
+          packagecloud-distro: ${{ matrix.distro }}
           packagecloud-token: ${{ secrets.PACKAGECLOUD_TOKEN }}
