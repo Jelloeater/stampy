@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/atotto/clipboard"
-	"github.com/beevik/ntp"
-	"github.com/urfave/cli/v2"
 	"log"
 	"log/slog"
 	"os"
 	"time"
+
+	"github.com/atotto/clipboard"
+	"github.com/beevik/ntp"
+	"github.com/urfave/cli/v2"
 )
 
 var ( // Create by GoRelease at compile time
@@ -16,7 +17,7 @@ var ( // Create by GoRelease at compile time
 	//date    = "unknown"
 )
 
-func writeDate(format string, timezone string, ntpServer string) {
+func writeDate(format string, timezone string, ntpServer string, diaryFormat bool) {
 
 	if os.Getenv("STAMPY_TZ") != "" {
 		timezone = os.Getenv("STAMPY_TZ")
@@ -27,23 +28,33 @@ func writeDate(format string, timezone string, ntpServer string) {
 	if os.Getenv("STAMPY_NTP") != "" {
 		ntpServer = os.Getenv("STAMPY_NTP")
 	}
-
-	loc, e := time.LoadLocation(timezone)
-	if e != nil {
-		log.Fatal(e)
+	if diaryFormat {
+		format = "Monday January 2 2006 3:04PM"
 	}
-	now := time.Now().In(loc)
+
+	now := time.Time{} // Declare now outside the if-else block
+
+	if timezone != "" {
+		now = time.Now()
+	} else {
+		loc, e := time.LoadLocation(timezone)
+		if e != nil {
+			log.Fatal(e)
+		}
+		now = time.Now().In(loc)
+	}
 
 	if ntpServer != "" { // Override local time with NTP server
-		ntpTime, _ := ntp.Time(ntpServer)
-		now = ntpTime
-		println("NTP from " + ntpServer)
+		ntpTime, err := ntp.Time(ntpServer)
+		if err == nil { // Check for errors when getting NTP time
+			now = ntpTime
+			println("NTP from " + ntpServer)
+		}
 	}
 	timestamp := now.Format(format)
 	clip := timestamp
 	println(clip + " copied to clipboard")
 	_ = clipboard.WriteAll(clip)
-
 }
 
 func mainCliApp() error {
@@ -57,12 +68,17 @@ func mainCliApp() error {
 		Name:    "stampy",
 		Usage:   "Copy formatted timestamp to system clipboard",
 		Args:    true,
-		Version: "v" + version + " build " + commit,
+		Version: "v" + version + "+" + commit,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "format",
 				Value: "2006-01-02T15:04:05Z07:00",
 				Usage: "Timestamp format",
+			},
+			&cli.BoolFlag{
+				Name:  "diary",
+				Value: false,
+				Usage: "Diary format",
 			},
 			&cli.StringFlag{
 				Name:  "timezone",
@@ -83,7 +99,13 @@ func mainCliApp() error {
 			format := c.String("format")
 			timezone := c.String("timezone")
 			ntpServer := c.String("ntp_server")
-			writeDate(format, timezone, ntpServer)
+			diaryFormat := c.Bool("diary")
+			writeDate(
+				format,
+				timezone,
+				ntpServer,
+				diaryFormat,
+			)
 
 			return nil
 		},

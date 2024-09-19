@@ -31,7 +31,6 @@ tasks:
         - rm_deb
         - snapshot_build
       cmds:
-        - goreleaser --snapshot --clean
         - sudo dpkg -i $(find dist/*amd64.deb)
 
     install-hooks:
