@@ -14,9 +14,6 @@ permissions:
 
 jobs:
   goreleaser:
-    strategy:
-      matrix:
-        distro: [debian/bullseye, debian/bookworm, ubuntu/noble, ubuntu/jammy]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,12 +34,31 @@ jobs:
           args: release --clean --verbose --config .goreleaser.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload .deb artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: deb-package
+          path: dist/*.deb
 
-      - name: push package to packagecloud.io
+  packagecloud:
+    runs-on: ubuntu-latest
+    needs:
+      - goreleaser
+    strategy:
+      matrix:
+        distro: [debian/bullseye, debian/bookworm, ubuntu/noble, ubuntu/jammy]
+    steps:
+      - name: Download .deb artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: deb-package
+
+      - name: Push package to packagecloud.io
         uses: computology/packagecloud-github-action@v0.6
         with:
-          package-name: dist/*.deb
+          package-name: ./*.deb
           packagecloud-username: jelloeater
           packagecloud-reponame: stampy
           packagecloud-distro: ${{ matrix.distro }}
           packagecloud-token: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
