@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/atotto/clipboard"
-	"github.com/beevik/ntp"
-	"github.com/urfave/cli/v2"
 	"log"
 	"log/slog"
 	"os"
 	"time"
+
+	"github.com/atotto/clipboard"
+	"github.com/beevik/ntp"
+	"github.com/urfave/cli/v2"
 )
 
 var ( // Create by GoRelease at compile time
@@ -28,25 +29,32 @@ func writeDate(format string, timezone string, ntpServer string, diaryFormat boo
 		ntpServer = os.Getenv("STAMPY_NTP")
 	}
 	if diaryFormat {
-		format = "1/2/2006 15:04"
+		format = "Monday January 2 2006 3:04PM"
 	}
 
-	loc, e := time.LoadLocation(timezone)
-	if e != nil {
-		log.Fatal(e)
+	now := time.Time{} // Declare now outside the if-else block
+
+	if timezone != "" {
+		now = time.Now()
+	} else {
+		loc, e := time.LoadLocation(timezone)
+		if e != nil {
+			log.Fatal(e)
+		}
+		now = time.Now().In(loc)
 	}
-	now := time.Now().In(loc)
 
 	if ntpServer != "" { // Override local time with NTP server
-		ntpTime, _ := ntp.Time(ntpServer)
-		now = ntpTime
-		println("NTP from " + ntpServer)
+		ntpTime, err := ntp.Time(ntpServer)
+		if err == nil { // Check for errors when getting NTP time
+			now = ntpTime
+			println("NTP from " + ntpServer)
+		}
 	}
 	timestamp := now.Format(format)
 	clip := timestamp
 	println(clip + " copied to clipboard")
 	_ = clipboard.WriteAll(clip)
-
 }
 
 func mainCliApp() error {
