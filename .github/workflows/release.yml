@@ -42,5 +42,5 @@ jobs:
           package-name: dist/*.deb
           packagecloud-username: jelloeater
           packagecloud-reponame: stampy
-          packagecloud-distro: any
+          packagecloud-distro: Debian
           packagecloud-token: ${{ secrets.PACKAGECLOUD_TOKEN }}
