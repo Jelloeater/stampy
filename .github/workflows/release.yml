@@ -41,6 +41,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+
+      - run: |
+          sudo apt-get install tree -y
+          tree dist
+
       - name: Upload .deb artifact
         uses: actions/upload-artifact@v3
         with:
