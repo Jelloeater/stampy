@@ -42,11 +42,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
 
-      - run: |
+      - name: List Dist
+        run: |
           sudo apt-get install tree -y
           tree dist
 
-      - name: Upload .deb artifact
+      - name: Upload .deb artifact x86
         uses: actions/upload-artifact@v3
         with:
           name: deb-package
@@ -56,18 +57,18 @@ jobs:
         with:
           name: deb-package-arm
           path: dist/*arm64.deb
-      - name: Upload .rpm artifact
+      - name: Upload .rpm artifact x86
         uses: actions/upload-artifact@v3
         with:
           name: rpm-package
-          path: dist/*x86_64.rpm
-      - name: Upload .apk artifact
+          path: dist/*amd64.rpm
+      - name: Upload .apk artifact x86
         uses: actions/upload-artifact@v3
         with:
           name: apk-package
-          path: dist/*.apk
+          path: dist/*amd64.apk
 
-  packagecloud_amd64:
+  pkgcld_amd64-deb:
     runs-on: ubuntu-latest
     needs:
       - goreleaser
@@ -100,7 +101,7 @@ jobs:
           packagecloud-distro: ${{ matrix.distro }}
           packagecloud-token: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
-  packagecloud_amd64-rpm:
+  pkgcld_amd64-rpm:
     runs-on: ubuntu-latest
     needs:
       - goreleaser
@@ -125,13 +126,13 @@ jobs:
       - name: Push package to packagecloud.io
         uses: computology/packagecloud-github-action@v0.6
         with:
-          package-name: ./*.deb
+          package-name: ./*.rpm
           packagecloud-username: jelloeater
           packagecloud-reponame: stampy
           packagecloud-distro: ${{ matrix.distro }}
           packagecloud-token: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
-  packagecloud_amd64-apk:
+  pkgcld_amd64-apk:
     runs-on: ubuntu-latest
     needs:
       - goreleaser
@@ -156,7 +157,7 @@ jobs:
           packagecloud-distro: ${{ matrix.distro }}
           packagecloud-token: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
-  packagecloud_arm:
+  pkgcld_arm-deb:
     runs-on: ubuntu-latest
     needs:
       - goreleaser
