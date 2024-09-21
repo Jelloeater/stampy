@@ -11,13 +11,20 @@
 
 ## Install
 
-### Apt-Get (Perfered)
+### Apt (Perfered)
 
 https://packagecloud.io/jelloeater/stampy
 
 ```shell
 curl -s https://packagecloud.io/install/repositories/jelloeater/stampy/script.deb.sh | sudo bash
 sudo apt-get install stampy
+```
+
+### Yum (Perfered)
+
+```shell
+curl -s https://packagecloud.io/install/repositories/jelloeater/stampy/script.rpm.sh | sudo bash
+sudo yum install stampy
 ```
 
 ### Binary (eget)
