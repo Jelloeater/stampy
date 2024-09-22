@@ -42,12 +42,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: stable
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
 
       - name: Release config
         run: |
@@ -89,17 +83,6 @@ jobs:
             mode: replace
             include_meta: true
 
-          signs:
-            - artifacts: checksum
-              cmd: gpg2
-              args:
-                - "--batch"
-                - "-u"
-                - "{{ .Env.GPG_FINGERPRINT }}"
-                - "--output"
-                - "${signature}"
-                - "--detach-sign"
-                - "${artifact}"
           EOF
 
       - name: Run GoReleaser
