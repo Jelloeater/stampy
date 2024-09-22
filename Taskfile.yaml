@@ -11,7 +11,7 @@ tasks:
             - go vet .
             - go clean .
             - task: build
-            - stampy
+            - ./dist/stampy_linux_386/stampy
         silent: false
 
     go_build:
@@ -20,10 +20,6 @@ tasks:
         - go build -o ./build .
         - ./build/stampy
 
-    rm_deb:
-      ignore_error: true
-      cmds:
-      - sudo dpkg -r stampy -y
     build:
       - goreleaser --snapshot --clean
 
