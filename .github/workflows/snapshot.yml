@@ -11,8 +11,35 @@ permissions:
   issues: write
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.0
+      - name: Install dependencies
+        run: go mod download
+      - name: Run tests
+        run: go test -v ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
+
+      - name: check test coverage
+        uses: vladopajic/go-test-coverage@v2
+        with:
+          profile: cover.out
+          local-prefix: github.com/jelloeater/stampy
+          threshold-file: 0
+          threshold-package: 0
+          threshold-total: 60
+
   goreleaser:
     runs-on: ubuntu-latest
+    needs:
+      - test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
