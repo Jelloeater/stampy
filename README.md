@@ -1,5 +1,8 @@
 # Stampy
 
+[![Test](https://github.com/Jelloeater/stampy/actions/workflows/test.yml/badge.svg)](https://github.com/Jelloeater/stampy/actions/workflows/test.yml)
+![coverage](https://raw.githubusercontent.com/Jelloeater/stampy/refs/heads/badges/.badges/main/coverage.svg)
+
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/jelloeater/stampy)
 ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/jelloeater/stampy)
 

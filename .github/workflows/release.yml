@@ -33,7 +33,7 @@ jobs:
 
       - name: Release config
         run: |
-          cat << EOF > .goreleaser-github.yaml
+          cat << EOF > /goreleaser-github.yaml
           project_name: stampy
           version: 2
           builds:
@@ -90,7 +90,7 @@ jobs:
           distribution: goreleaser
           # 'latest', 'nightly', or a semver
           version: "~> v2"
-          args: release --clean --verbose --config .goreleaser-github.yaml
+          args: release --clean --verbose --config /goreleaser-github.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
