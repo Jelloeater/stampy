@@ -35,6 +35,16 @@ jobs:
           threshold-file: 0
           threshold-package: 0
           threshold-total: 60
+          git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
+          git-branch: badges
+
+#  git checkout --orphan badges
+#  git rm -rf .
+#  rm -f .gitignore
+#  echo '# Badges' > README.md
+#  git add README.md
+#  git commit -m 'init'
+#  git push origin badges
 
   goreleaser:
     runs-on: ubuntu-latest
