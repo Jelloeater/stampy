@@ -24,14 +24,8 @@ tasks:
       ignore_error: true
       cmds:
       - sudo dpkg -r stampy -y
-    snapshot_build:
-      - goreleaser --snapshot --clean
     build:
-      deps:
-        - rm_deb
-        - snapshot_build
-      cmds:
-        - sudo dpkg -i $(find dist/*amd64.deb)
+      - goreleaser --snapshot --clean
 
     install-hooks:
         cmds:

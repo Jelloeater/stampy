@@ -31,6 +31,59 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
 
+      - name: Release config
+        run: |
+          cat << EOF > .goreleaser-github.yaml
+          project_name: stampy
+          version: 2
+          builds:
+            - env: [CGO_ENABLED=0]
+              goos:
+                - linux
+                - windows
+                - darwin
+              goarch:
+                - amd64
+                - arm64
+          nfpms:
+            -
+              maintainer: Jelloeater <jello@jelloeater.me>
+              bindir: /usr/local/bin
+              description: Copy formatted timestamp to system clipboard
+              homepage: https://github.com/Jelloeater/stampy
+              license: MIT
+              formats:
+                - deb
+                - rpm
+                - apk
+                - termux.deb
+                - archlinux
+                - ipk
+
+          release:
+            draft: false # If set to true, will not auto-publish the release.
+            replace_existing_draft: true
+            replace_existing_artifacts: true
+            target_commitish: "{{ .Commit }}"
+            prerelease: auto
+
+            make_latest: true
+            mode: replace
+            include_meta: true
+
+          signs:
+            - artifacts: checksum
+              cmd: gpg2
+              args:
+                - "--batch"
+                - "-u"
+                - "{{ .Env.GPG_FINGERPRINT }}"
+                - "--output"
+                - "${signature}"
+                - "--detach-sign"
+                - "${artifact}"
+          EOF
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:

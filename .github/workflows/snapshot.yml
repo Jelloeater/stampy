@@ -1,0 +1,93 @@
+name: Snapshot
+
+on:
+  pull_request:
+  push:
+
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Install Deps
+        run: |
+          sudo apt-get install tree git-extras -y
+
+      - name: Release config
+        run: |
+          cat << EOF > .goreleaser-github.yaml
+          project_name: stampy
+          version: 2
+          builds:
+            - env: [CGO_ENABLED=0]
+              goos:
+                - linux
+                - windows
+                - darwin
+              goarch:
+                - amd64
+                - arm64
+          nfpms:
+            -
+              maintainer: Jelloeater <jello@jelloeater.me>
+              bindir: /usr/local/bin
+              description: Copy formatted timestamp to system clipboard
+              homepage: https://github.com/Jelloeater/stampy
+              license: MIT
+              formats:
+                - deb
+                - rpm
+                - apk
+                - termux.deb
+                - archlinux
+                - ipk
+          EOF
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          # 'latest', 'nightly', or a semver
+          version: "~> v2"
+          args: release --clean --verbose --snapshot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+
+      - name: List Dist
+        run: |
+          tree dist
+
+      - name: Add changelog
+        run: |
+          git-changelog -a -x -t >> dist/CHANGELOG.md
+
+      - name: Generate artifact name
+        id: artifact_name
+        run: |
+          REPO_NAME=${GITHUB_REPOSITORY##*/}
+          SHORT_SHA=${GITHUB_SHA::7}
+          ARTIFACT_NAME="${REPO_NAME}-${GITHUB_REF_NAME}-${SHORT_SHA}"
+          echo "name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+
+      - name: Upload Dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.artifact_name.outputs.name }}
+          path: dist/*
+          retention-days: 14
+
