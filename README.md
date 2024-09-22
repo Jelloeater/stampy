@@ -2,11 +2,13 @@
 
 [![Test](https://github.com/Jelloeater/stampy/actions/workflows/test.yml/badge.svg)](https://github.com/Jelloeater/stampy/actions/workflows/test.yml)
 ![coverage](https://raw.githubusercontent.com/Jelloeater/stampy/refs/heads/badges/.badges/main/coverage.svg)
-
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/jelloeater/stampy)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jelloeater/stampy)](https://goreportcard.com/report/github.com/jelloeater/stampy)
 ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/jelloeater/stampy)
 
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/jelloeater/stampy/total) ![GitHub Release](https://img.shields.io/github/v/release/jelloeater/stampy) ![GitHub Release Date](https://img.shields.io/github/release-date/jelloeater/stampy)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/jelloeater/stampy/total)
+![GitHub Release](https://img.shields.io/github/v/release/jelloeater/stampy)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/jelloeater/stampy)
+![GitHub Release Date](https://img.shields.io/github/release-date/jelloeater/stampy)
 
 **<https://libraries.io/go/github.com%2FJelloeater%2Fstampy>**
 
