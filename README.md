@@ -39,7 +39,7 @@ Use <https://github.com/zyedidia/eget>
 ```shell
 curl https://zyedidia.github.io/eget.sh | sh
 sudo mv eget /usr/local/bin
-sudo eget Jelloeater/stampy --to /usr/local/bin
+sudo eget jelloeater/stampy --to /usr/local/bin --asset=tar.gz
 ```
 
 ### Via Go
