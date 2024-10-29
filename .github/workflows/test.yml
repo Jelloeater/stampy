@@ -66,7 +66,7 @@ jobs:
 
       - name: Release config
         run: |
-          cat << EOF > .goreleaser-github.yaml
+          cat << EOF > /tmp/goreleaser-github.yaml
           project_name: stampy
           version: 2
           builds:
