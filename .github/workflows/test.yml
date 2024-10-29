@@ -83,6 +83,9 @@ jobs:
                 - amd64
                 - arm
                 - arm64
+          ignore:
+            - goos: android
+              goarch: 386
           nfpms:
             -
               maintainer: Jelloeater <jello@jelloeater.me>
