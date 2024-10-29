@@ -105,7 +105,7 @@ jobs:
           distribution: goreleaser
           # 'latest', 'nightly', or a semver
           version: "~> v2"
-          args: release --clean --verbose --snapshot
+          args: release --clean --verbose --snapshot --config /tmp/goreleaser-github.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
