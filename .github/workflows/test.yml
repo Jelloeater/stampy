@@ -70,7 +70,7 @@ jobs:
           project_name: stampy
           version: 2
           builds:
-            - env: [CGO_ENABLED=0]
+            - env: [CGO_ENABLED=1]
               goos:
                 - linux
                 - windows
@@ -83,9 +83,6 @@ jobs:
                 - amd64
                 - arm
                 - arm64
-          ignore:
-            - goos: android
-              goarch: 386
           nfpms:
             -
               maintainer: Jelloeater <jello@jelloeater.me>
