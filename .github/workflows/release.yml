@@ -54,8 +54,13 @@ jobs:
                 - linux
                 - windows
                 - darwin
+                - freebsd
+                - openbsd
+                - android
               goarch:
+                - 386
                 - amd64
+                - arm
                 - arm64
           nfpms:
             -
