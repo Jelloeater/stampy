@@ -70,14 +70,13 @@ jobs:
           project_name: stampy
           version: 2
           builds:
-            - env: [CGO_ENABLED=1]
+            - env: [CGO_ENABLED=0]
               goos:
                 - linux
                 - windows
                 - darwin
                 - freebsd
                 - openbsd
-                - android
               goarch:
                 - 386
                 - amd64
