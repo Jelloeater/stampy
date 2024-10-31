@@ -109,8 +109,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
 
-      - name: List Dist
+      - name: List & Clean Dist
         run: |
+          tree dist
+          cd dist
+          find . -type d -name "*stampy*" -exec rm -rf {} +
+          cd ..
           tree dist
 
       - name: Add changelog
